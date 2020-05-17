@@ -1,0 +1,3 @@
+[submodule "portfolio/portfolio_site"]
+	path = portfolio/portfolio_site
+	url = git@github.com:SeanAmmirati/portfolio_site.git
