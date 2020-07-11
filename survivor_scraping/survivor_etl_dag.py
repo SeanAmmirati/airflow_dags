@@ -1,3 +1,6 @@
+import sys
+sys.path.append('/home/pi/airflow/dags/survivor_scraping')
+
 from airflow.hooks.base_hook import BaseHook
 from survivor_processing.src.survivor_scraping.confessional.confessional_extract import extract_confessionals
 from survivor_processing.src.survivor_scraping.confessional.confessional_transform import transform_confessionals
@@ -21,8 +24,7 @@ import os
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-import sys
-sys.path.append('/home/pi/airflow/dags/survivor_scraping')
+import syssys.path.append('/home/pi/airflow/dags/survivor_scraping')
 
 
 connection = BaseHook.get_connection('postgres_default')
