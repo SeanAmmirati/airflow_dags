@@ -1,7 +1,3 @@
-
-from airflow.operators.python_operator import PythonOperator
-from airflow import DAG
-from datetime import datetime, timedelta
 import os
 from survivor_processing.src.survivor_scraping.season.season_load import load_seasons
 from survivor_processing.src.survivor_scraping.season.season_transform import transform_seasons
@@ -21,11 +17,25 @@ from survivor_processing.src.survivor_scraping.contestant.contestant_extract imp
 from survivor_processing.src.survivor_scraping.confessional.confessional_load import load_confessionals
 from survivor_processing.src.survivor_scraping.confessional.confessional_transform import transform_confessionals
 from survivor_processing.src.survivor_scraping.confessional.confessional_extract import extract_confessionals
+from datetime import datetime, timedelta
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.hooks.base_hook import BaseHook
 import sys
 sys.path.append('/home/pi/airflow/dags/survivor_scraping')
 
 
-ENGINE = os.getenv('POSTGRES_CREDENTIALS')
+connection = BaseHook.get_connection('postgres_default')
+pg_creds = connection.password
+
+format_dict = {
+    'username': connection.login,
+    'password': connection.password,
+    'host': connection.host,
+    'port': connection.port
+}
+ENGINE = 'postgresql://{username}:{password}@{host}:{port}'.format(
+    **format_dict)
 PARAMS = dict(eng=ENGINE)
 
 
