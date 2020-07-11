@@ -62,7 +62,7 @@ def etl_ep_stats(connection_str, *args, **kwargs):
 
 def etl_episodes(connection_str, *args, **kwargs):
 
-    eng = create_ection(conne_strction)
+    eng = create_engine(connection_str)
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_episodes(eng, asof=ds)
