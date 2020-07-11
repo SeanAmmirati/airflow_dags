@@ -42,6 +42,7 @@ PARAMS = dict(eng=ENGINE)
 
 
 def etl_confessional(*args, **kwargs):
+    eng = kwargs['eng']
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_confessionals(eng, asof=ds)
@@ -50,6 +51,7 @@ def etl_confessional(*args, **kwargs):
 
 
 def etl_contestants(*args, **kwargs):
+    eng = kwargs['eng']
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_contestants(eng, asof=ds)
@@ -58,6 +60,7 @@ def etl_contestants(*args, **kwargs):
 
 
 def etl_ep_stats(*args, **kwargs):
+    eng = kwargs['eng']
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_episode_stats(eng, asof=ds)
@@ -66,6 +69,7 @@ def etl_ep_stats(*args, **kwargs):
 
 
 def etl_episodes(*args, **kwargs):
+    eng = kwargs['eng']
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_episodes(eng, asof=ds)
@@ -74,6 +78,7 @@ def etl_episodes(*args, **kwargs):
 
 
 def etl_reddit(*args, **kwargs):
+    eng = kwargs['eng']
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_reddit(eng, asof=ds)
@@ -82,6 +87,7 @@ def etl_reddit(*args, **kwargs):
 
 
 def etl_seasons(*args, **kwargs):
+    eng = kwargs['eng']
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_seasons(eng, asof=ds)
