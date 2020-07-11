@@ -81,6 +81,10 @@ def etl_reddit(*args, **kwargs):
     eng = create_engine(connection_str)
     ds = kwargs.get('asof', kwargs['ds'])
 
+    # For the etl_reddit, we need to push this back a bit. Let's move it back a few hours, to be safe
+
+    ds -= timedelta(hours=2)
+
     e = extract_reddit(eng, asof=ds)
     t = transform_reddit(e, eng)
     load_reddit(t, eng)
