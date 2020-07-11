@@ -1,47 +1,54 @@
 import sys
 sys.path.append('/home/pi/airflow/dags/survivor_scraping')
 
-from airflow.hooks.base_hook import BaseHook
-from survivor_processing.src.survivor_scraping.confessional.confessional_extract import extract_confessionals
-from survivor_processing.src.survivor_scraping.confessional.confessional_transform import transform_confessionals
-from survivor_processing.src.survivor_scraping.confessional.confessional_load import load_confessionals
-from survivor_processing.src.survivor_scraping.contestant.contestant_extract import extract_contestants
-from survivor_processing.src.survivor_scraping.contestant.contestant_transform import transform_contestants
-from survivor_processing.src.survivor_scraping.contestant.contestant_load import load_contestants
-from survivor_processing.src.survivor_scraping.episode_stats.episode_stats_extract import extract_episode_stats
-from survivor_processing.src.survivor_scraping.episode_stats.episode_stats_transform import transform_episode_stats
-from survivor_processing.src.survivor_scraping.episode_stats.episode_stats_load import load_episode_stats
-from survivor_processing.src.survivor_scraping.episodes.episodes_extract import extract_episodes
-from survivor_processing.src.survivor_scraping.episodes.episodes_transform import transform_episodes
-from survivor_processing.src.survivor_scraping.episodes.episodes_load import load_episodes
-from survivor_processing.src.survivor_scraping.reddit.reddit_extract import extract_reddit
-from survivor_processing.src.survivor_scraping.reddit.reddit_transform import transform_reddit
-from survivor_processing.src.survivor_scraping.reddit.reddit_load import load_reddit
-from survivor_processing.src.survivor_scraping.season.season_extract import extract_seasons
-from survivor_processing.src.survivor_scraping.season.season_transform import transform_seasons
-from survivor_processing.src.survivor_scraping.season.season_load import load_seasons
-import os
-from datetime import datetime, timedelta
-from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
-from sqlalchemy import create_engine
 
+from sqlalchemy import create_engine
+from airflow.operators.python_operator import PythonOperator
+from airflow import DAG
+from datetime import datetime, timedelta
+import os
+from survivor_processing.src.survivor_scraping.season.season_load import load_seasons
+from survivor_processing.src.survivor_scraping.season.season_transform import transform_seasons
+from survivor_processing.src.survivor_scraping.season.season_extract import extract_seasons
+from survivor_processing.src.survivor_scraping.reddit.reddit_load import load_reddit
+from survivor_processing.src.survivor_scraping.reddit.reddit_transform import transform_reddit
+from survivor_processing.src.survivor_scraping.reddit.reddit_extract import extract_reddit
+from survivor_processing.src.survivor_scraping.episodes.episodes_load import load_episodes
+from survivor_processing.src.survivor_scraping.episodes.episodes_transform import transform_episodes
+from survivor_processing.src.survivor_scraping.episodes.episodes_extract import extract_episodes
+from survivor_processing.src.survivor_scraping.episode_stats.episode_stats_load import load_episode_stats
+from survivor_processing.src.survivor_scraping.episode_stats.episode_stats_transform import transform_episode_stats
+from survivor_processing.src.survivor_scraping.episode_stats.episode_stats_extract import extract_episode_stats
+from survivor_processing.src.survivor_scraping.contestant.contestant_load import load_contestants
+from survivor_processing.src.survivor_scraping.contestant.contestant_transform import transform_contestants
+from survivor_processing.src.survivor_scraping.contestant.contestant_extract import extract_contestants
+from survivor_processing.src.survivor_scraping.confessional.confessional_load import load_confessionals
+from survivor_processing.src.survivor_scraping.confessional.confessional_transform import transform_confessionals
+from survivor_processing.src.survivor_scraping.confessional.confessional_extract import extract_confessionals
+from airflow.hooks.base_hook import BaseHook
 
 connection = BaseHook.get_connection('postgres_default')
 pg_creds = connection.password
 
-format_dict = {
-    'username': connection.login,
-    'password': connection.password,
-    'host': connection.host,
-    'port': connection.port
-}
-ENGINE = 'postgresql://{username}:{password}@{host}:{port}'.format(
-    **format_dict)
-PARAMS = dict(eng=create_engine(ENGINE))
+
+def create_engine_from_connection(connection):
+
+    format_dict = {
+        'username': connection.login,
+        'password': connection.password,
+        'host': connection.host,
+        'port': connection.port
+    }
+    con_str = 'postgresql://{username}:{password}@{host}:{port}'.format(
+        **format_dict)
+    return create_engine(con_str)
 
 
-def etl_confessional(eng, *args, **kwargs):
+PARAMS = dict(pg_creds)
+
+
+def etl_confessional(connection, *args, **kwargs):
+    eng = create_engine_from_connection(connection)
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_confessionals(eng, asof=ds)
@@ -49,7 +56,8 @@ def etl_confessional(eng, *args, **kwargs):
     load_confessionals(t, eng)
 
 
-def etl_contestants(eng, *args, **kwargs):
+def etl_contestants(connection, *args, **kwargs):
+    eng = create_engine_from_connection(connection)
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_contestants(eng, asof=ds)
@@ -57,7 +65,8 @@ def etl_contestants(eng, *args, **kwargs):
     load_contestants(t, eng)
 
 
-def etl_ep_stats(eng, *args, **kwargs):
+def etl_ep_stats(connection, *args, **kwargs):
+    eng = create_engine_from_connection(connection)
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_episode_stats(eng, asof=ds)
@@ -65,7 +74,8 @@ def etl_ep_stats(eng, *args, **kwargs):
     load_episode_stats(t, eng)
 
 
-def etl_episodes(eng, *args, **kwargs):
+def etl_episodes(connection, *args, **kwargs):
+    eng = create_engine_from_connection(connection)
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_episodes(eng, asof=ds)
@@ -73,7 +83,8 @@ def etl_episodes(eng, *args, **kwargs):
     load_episodes(t, eng)
 
 
-def etl_reddit(eng, *args, **kwargs):
+def etl_reddit(connection, *args, **kwargs):
+    eng = create_engine_from_connection(connection)
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_reddit(eng, asof=ds)
@@ -81,7 +92,8 @@ def etl_reddit(eng, *args, **kwargs):
     load_reddit(t, eng)
 
 
-def etl_seasons(eng, *args, **kwargs):
+def etl_seasons(connection, *args, **kwargs):
+    eng = create_engine_from_connection(connection)
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_seasons(eng, asof=ds)
