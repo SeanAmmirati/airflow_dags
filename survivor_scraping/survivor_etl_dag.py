@@ -24,7 +24,7 @@ import os
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-
+from sqlalchemy import create_engine
 
 
 connection = BaseHook.get_connection('postgres_default')
@@ -38,11 +38,10 @@ format_dict = {
 }
 ENGINE = 'postgresql://{username}:{password}@{host}:{port}'.format(
     **format_dict)
-PARAMS = dict(eng=ENGINE)
+PARAMS = dict(eng=create_engine(ENGINE))
 
 
-def etl_confessional(*args, **kwargs):
-    eng = kwargs['eng']
+def etl_confessional(eng, *args, **kwargs):
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_confessionals(eng, asof=ds)
@@ -50,8 +49,7 @@ def etl_confessional(*args, **kwargs):
     load_confessionals(t, eng)
 
 
-def etl_contestants(*args, **kwargs):
-    eng = kwargs['eng']
+def etl_contestants(eng, *args, **kwargs):
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_contestants(eng, asof=ds)
@@ -59,8 +57,7 @@ def etl_contestants(*args, **kwargs):
     load_contestants(t, eng)
 
 
-def etl_ep_stats(*args, **kwargs):
-    eng = kwargs['eng']
+def etl_ep_stats(eng, *args, **kwargs):
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_episode_stats(eng, asof=ds)
@@ -68,8 +65,7 @@ def etl_ep_stats(*args, **kwargs):
     load_episode_stats(t, eng)
 
 
-def etl_episodes(*args, **kwargs):
-    eng = kwargs['eng']
+def etl_episodes(eng, *args, **kwargs):
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_episodes(eng, asof=ds)
@@ -77,8 +73,7 @@ def etl_episodes(*args, **kwargs):
     load_episodes(t, eng)
 
 
-def etl_reddit(*args, **kwargs):
-    eng = kwargs['eng']
+def etl_reddit(eng, *args, **kwargs):
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_reddit(eng, asof=ds)
@@ -86,8 +81,7 @@ def etl_reddit(*args, **kwargs):
     load_reddit(t, eng)
 
 
-def etl_seasons(*args, **kwargs):
-    eng = kwargs['eng']
+def etl_seasons(eng, *args, **kwargs):
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_seasons(eng, asof=ds)
