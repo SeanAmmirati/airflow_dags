@@ -28,7 +28,7 @@ from survivor_processing.src.survivor_scraping.confessional.confessional_extract
 from airflow.hooks.base_hook import BaseHook
 
 connection = BaseHook.get_connection('postgres_default')
-pg_creds = connection.password
+pg_creds = connection
 
 
 def create_engine_from_connection(connection):
