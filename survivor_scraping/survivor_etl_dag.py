@@ -71,6 +71,8 @@ def etl_ep_stats(*args, **kwargs):
 
 
 def etl_episodes(*args, **kwargs):
+    connection = BaseHook.get_connection('postgres_default')
+
     eng = create_engine_from_connection(connection)
     ds = kwargs.get('asof', kwargs['ds'])
 
