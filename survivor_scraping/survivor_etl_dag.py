@@ -22,6 +22,7 @@ from survivor_processing.src.survivor_scraping.season.season_extract import extr
 from survivor_processing.src.survivor_scraping.season.season_transform import transform_seasons
 from survivor_processing.src.survivor_scraping.season.season_load import load_seasons
 import os
+import pandas as pd
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
@@ -83,7 +84,7 @@ def etl_reddit(*args, **kwargs):
 
     # For the etl_reddit, we need to push this back a bit. Let's move it back a few hours, to be safe
 
-    ds -= timedelta(hours=2)
+    ds = pd.to_datetime(ds)- timedelta(hours=2)
 
     e = extract_reddit(eng, asof=ds)
     t = transform_reddit(e, eng)
