@@ -1,3 +1,6 @@
 [submodule "portfolio/portfolio_site"]
 	path = portfolio/portfolio_site
 	url = git@github.com:SeanAmmirati/portfolio_site.git
+[submodule "survivor_scraping/survivor_processing"]
+	path = survivor_scraping/survivor_processing
+	url = git@github.com:SeanAmmirati/survivor_processing.git
