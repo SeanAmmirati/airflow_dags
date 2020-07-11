@@ -1,3 +1,5 @@
+import sys
+sys.path.append('/home/pi/airflow/dags/survivor_scraping')
 
 from airflow.operators.python_operator import PythonOperator
 from airflow import DAG
@@ -21,9 +23,6 @@ from survivor_processing.src.survivor_scraping.contestant.contestant_extract imp
 from survivor_processing.src.survivor_scraping.confessional.confessional_load import load_confessionals
 from survivor_processing.src.survivor_scraping.confessional.confessional_transform import transform_confessionals
 from survivor_processing.src.survivor_scraping.confessional.confessional_extract import extract_confessionals
-import sys
-sys.path.append('/home/pi/airflow/dags/survivor_scraping')
-
 
 ENGINE = os.getenv('POSTGRES_CREDENTIALS')
 PARAMS = dict(eng=ENGINE)
