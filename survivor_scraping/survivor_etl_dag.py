@@ -26,7 +26,7 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from sqlalchemy import create_engine
 
-
+PARAMS = dict()
 def create_engine_from_connection(connection):
 
     format_dict = {
