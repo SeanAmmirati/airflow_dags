@@ -44,7 +44,7 @@ def create_engine_from_connection(connection):
     return create_engine(con_str)
 
 
-PARAMS = dict(pg_creds)
+PARAMS = dict(connection=pg_creds)
 
 
 def etl_confessional(connection, *args, **kwargs):
