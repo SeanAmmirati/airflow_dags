@@ -41,7 +41,7 @@ ENGINE = 'postgresql://{username}:{password}@{host}:{port}'.format(
 PARAMS = dict(eng=ENGINE)
 
 
-def etl_confessional(eng, *args, **kwargs):
+def etl_confessional(*args, **kwargs):
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_confessionals(eng, asof=ds)
@@ -49,7 +49,7 @@ def etl_confessional(eng, *args, **kwargs):
     load_confessionals(t, eng)
 
 
-def etl_contestants(eng, *args, **kwargs):
+def etl_contestants(*args, **kwargs):
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_contestants(eng, asof=ds)
@@ -57,7 +57,7 @@ def etl_contestants(eng, *args, **kwargs):
     load_contestants(t, eng)
 
 
-def etl_ep_stats(eng, *args, **kwargs):
+def etl_ep_stats(*args, **kwargs):
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_episode_stats(eng, asof=ds)
@@ -65,7 +65,7 @@ def etl_ep_stats(eng, *args, **kwargs):
     load_episode_stats(t, eng)
 
 
-def etl_episodes(eng, *args, **kwargs):
+def etl_episodes(*args, **kwargs):
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_episodes(eng, asof=ds)
@@ -73,7 +73,7 @@ def etl_episodes(eng, *args, **kwargs):
     load_episodes(t, eng)
 
 
-def etl_reddit(eng, *args, **kwargs):
+def etl_reddit(*args, **kwargs):
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_reddit(eng, asof=ds)
@@ -81,7 +81,7 @@ def etl_reddit(eng, *args, **kwargs):
     load_reddit(t, eng)
 
 
-def etl_seasons(eng, *args, **kwargs):
+def etl_seasons(*args, **kwargs):
     ds = kwargs.get('asof', kwargs['ds'])
 
     e = extract_seasons(eng, asof=ds)
