@@ -28,6 +28,9 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 
+import sys
+sys.path.append('/home/pi/airflow/dags/survivor_scraping')
+
 ENGINE = os.getenv('POSTGRES_CREDENTIALS')
 PARAMS = dict(eng=ENGINE)
 
