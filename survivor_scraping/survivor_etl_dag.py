@@ -24,7 +24,7 @@ import os
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-import syssys.path.append('/home/pi/airflow/dags/survivor_scraping')
+
 
 
 connection = BaseHook.get_connection('postgres_default')
