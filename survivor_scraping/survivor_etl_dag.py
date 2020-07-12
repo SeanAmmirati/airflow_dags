@@ -1,3 +1,6 @@
+import sys
+sys.path.append('/home/pi/airflow/dags/survivor_scraping')
+
 from sqlalchemy import create_engine
 from airflow.operators.python_operator import PythonOperator
 from airflow import DAG
@@ -23,9 +26,6 @@ from survivor_processing.src.survivor_scraping.confessional.confessional_load im
 from survivor_processing.src.survivor_scraping.confessional.confessional_transform import transform_confessionals
 from survivor_processing.src.survivor_scraping.confessional.confessional_extract import extract_confessionals
 from airflow.hooks.base_hook import BaseHook
-import sys
-sys.path.append('/home/pi/airflow/dags/survivor_scraping')
-
 
 PARAMS = dict()
 
