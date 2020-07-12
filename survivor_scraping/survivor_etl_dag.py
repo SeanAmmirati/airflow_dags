@@ -1,32 +1,30 @@
+from sqlalchemy import create_engine
+from airflow.operators.python_operator import PythonOperator
+from airflow import DAG
+from datetime import datetime, timedelta
+import pandas as pd
+import os
+from survivor_processing.src.survivor_scraping.season.season_load import load_seasons
+from survivor_processing.src.survivor_scraping.season.season_transform import transform_seasons
+from survivor_processing.src.survivor_scraping.season.season_extract import extract_seasons
+from survivor_processing.src.survivor_scraping.reddit.reddit_load import load_reddit
+from survivor_processing.src.survivor_scraping.reddit.reddit_transform import transform_reddit
+from survivor_processing.src.survivor_scraping.reddit.reddit_extract import extract_reddit
+from survivor_processing.src.survivor_scraping.episodes.episodes_load import load_episodes
+from survivor_processing.src.survivor_scraping.episodes.episodes_transform import transform_episodes
+from survivor_processing.src.survivor_scraping.episodes.episodes_extract import extract_episodes
+from survivor_processing.src.survivor_scraping.episode_stats.episode_stats_load import load_episode_stats
+from survivor_processing.src.survivor_scraping.episode_stats.episode_stats_transform import transform_episode_stats
+from survivor_processing.src.survivor_scraping.episode_stats.episode_stats_extract import extract_episode_stats
+from survivor_processing.src.survivor_scraping.contestant.contestant_load import load_contestants
+from survivor_processing.src.survivor_scraping.contestant.contestant_transform import transform_contestants
+from survivor_processing.src.survivor_scraping.contestant.contestant_extract import extract_contestants
+from survivor_processing.src.survivor_scraping.confessional.confessional_load import load_confessionals
+from survivor_processing.src.survivor_scraping.confessional.confessional_transform import transform_confessionals
+from survivor_processing.src.survivor_scraping.confessional.confessional_extract import extract_confessionals
+from airflow.hooks.base_hook import BaseHook
 import sys
 sys.path.append('/home/pi/airflow/dags/survivor_scraping')
-
-
-from airflow.hooks.base_hook import BaseHook
-from survivor_processing.src.survivor_scraping.confessional.confessional_extract import extract_confessionals
-from survivor_processing.src.survivor_scraping.confessional.confessional_transform import transform_confessionals
-from survivor_processing.src.survivor_scraping.confessional.confessional_load import load_confessionals
-from survivor_processing.src.survivor_scraping.contestant.contestant_extract import extract_contestants
-from survivor_processing.src.survivor_scraping.contestant.contestant_transform import transform_contestants
-from survivor_processing.src.survivor_scraping.contestant.contestant_load import load_contestants
-from survivor_processing.src.survivor_scraping.episode_stats.episode_stats_extract import extract_episode_stats
-from survivor_processing.src.survivor_scraping.episode_stats.episode_stats_transform import transform_episode_stats
-from survivor_processing.src.survivor_scraping.episode_stats.episode_stats_load import load_episode_stats
-from survivor_processing.src.survivor_scraping.episodes.episodes_extract import extract_episodes
-from survivor_processing.src.survivor_scraping.episodes.episodes_transform import transform_episodes
-from survivor_processing.src.survivor_scraping.episodes.episodes_load import load_episodes
-from survivor_processing.src.survivor_scraping.reddit.reddit_extract import extract_reddit
-from survivor_processing.src.survivor_scraping.reddit.reddit_transform import transform_reddit
-from survivor_processing.src.survivor_scraping.reddit.reddit_load import load_reddit
-from survivor_processing.src.survivor_scraping.season.season_extract import extract_seasons
-from survivor_processing.src.survivor_scraping.season.season_transform import transform_seasons
-from survivor_processing.src.survivor_scraping.season.season_load import load_seasons
-import os
-import pandas as pd
-from datetime import datetime, timedelta
-from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
-from sqlalchemy import create_engine
 
 
 PARAMS = dict()
@@ -80,11 +78,11 @@ def etl_reddit(*args, **kwargs):
     connection = BaseHook.get_connection('postgres_default')
     connection_str = connection.get_uri()
     eng = create_engine(connection_str)
-    ds = kwargs.get('asof', kwargs['ds'])
+    # Because this is handled internally, and backtracking will be constly,
+    # just allows the MAX created date to be used...
+    ds = None
 
     # For the etl_reddit, we need to push this back a bit. Let's move it back a few hours, to be safe
-
-    ds = pd.to_datetime(ds)- timedelta(hours=2)
 
     e = extract_reddit(eng, asof=ds)
     t = transform_reddit(e, eng)
