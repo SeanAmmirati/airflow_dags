@@ -1,9 +1,12 @@
 [submodule "portfolio/portfolio_site"]
 	path = portfolio/portfolio_site
 	url = git@github.com:SeanAmmirati/portfolio_site.git
+	branch = master
 [submodule "survivor_scraping/survivor_processing"]
 	path = survivor_scraping/survivor_processing
 	url = git@github.com:SeanAmmirati/survivor_processing.git
+	branch = master
 [submodule "sports_pull"]
 	path = sports_pull
 	url = git@gitlab.homeserver.home:sammirati/sports_pull.git
+	branch = master
