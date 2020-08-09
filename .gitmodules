@@ -4,6 +4,6 @@
 [submodule "survivor_scraping/survivor_processing"]
 	path = survivor_scraping/survivor_processing
 	url = git@github.com:SeanAmmirati/survivor_processing.git
-[submodule "sports_pull/sports_pull"]
-	path = sports_pull/sports_pull
-	url = git clone git@gitlab.homeserver.home:sammirati/sports_pull.git
+[submodule "sports_pull"]
+	path = sports_pull
+	url = git@gitlab.homeserver.home:sammirati/sports_pull.git
